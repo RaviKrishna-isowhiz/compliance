@@ -1,269 +1,462 @@
 'use client'
 
+import { useState } from 'react'
+import { Search, ChevronRight, CheckCircle2 } from 'lucide-react'
+
+const PROJECTS = [
+  {
+    id: '1',
+    name: 'Northern Network Broadband',
+    client: 'Northern Tribes',
+    score: 82,
+    status: 'great',
+    regulation: '2 CFR 200',
+    compliant: 82,
+    pending: 12,
+    non: 6,
+  },
+  {
+    id: '2',
+    name: 'Digital Equity Initiative',
+    client: 'Mountain County',
+    score: 65,
+    status: 'good',
+    regulation: 'Title VI',
+    compliant: 65,
+    pending: 20,
+    non: 15,
+  },
+  {
+    id: '3',
+    name: 'Rural Connectivity',
+    client: 'Eastern Region',
+    score: 45,
+    status: 'partial',
+    regulation: '2 CFR 200',
+    compliant: 45,
+    pending: 35,
+    non: 20,
+  },
+  {
+    id: '4',
+    name: 'Coastal Broadband',
+    client: 'Pacific Nations',
+    score: 55,
+    status: 'in-progress',
+    regulation: 'NEPA',
+    compliant: 55,
+    pending: 30,
+    non: 15,
+  },
+  {
+    id: '5',
+    name: 'Tech Support Center',
+    client: 'Central Services',
+    score: 28,
+    status: 'not-started',
+    regulation: 'ADA',
+    compliant: 28,
+    pending: 40,
+    non: 32,
+  },
+]
+
 export default function Page() {
+  const [search, setSearch] = useState('')
+
+  const filtered = PROJECTS.filter(
+    (p) =>
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.client.toLowerCase().includes(search.toLowerCase())
+  )
+
+  const getStatusBg = (status: string) => {
+    switch (status) {
+      case 'great':
+        return '#f0fdf4'
+      case 'good':
+        return '#f0f9ff'
+      case 'partial':
+        return '#fffbeb'
+      default:
+        return '#f3f4f6'
+    }
+  }
+
+  const getStatusBorder = (status: string) => {
+    switch (status) {
+      case 'great':
+        return '#bbf7d0'
+      case 'good':
+        return '#bfdbfe'
+      case 'partial':
+        return '#fcd34d'
+      default:
+        return '#e5e7eb'
+    }
+  }
+
+  const getScoreColor = (status: string) => {
+    switch (status) {
+      case 'great':
+        return '#22c55e'
+      case 'good':
+        return '#3b82f6'
+      case 'partial':
+        return '#f59e0b'
+      default:
+        return '#9ca3af'
+    }
+  }
+
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
       {/* Header */}
-      <header style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e2e8f0', position: 'sticky', top: 0, zIndex: 40 }}>
-        <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '0 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '0.5rem', backgroundColor: '#2563eb' }}>
-              <svg style={{ width: '24px', height: '24px', color: '#ffffff' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <header
+        style={{
+          borderBottom: '1px solid #e5e7eb',
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
+          backgroundColor: '#ffffff',
+        }}
+      >
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              height: '64px',
+              gap: '16px',
+            }}
+          >
+            <div
+              style={{
+                width: '40px',
+                height: '40px',
+                backgroundColor: '#2563eb',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
             </div>
             <div>
-              <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Compliance Manager</h1>
-              <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: 0 }}>Federal Grants Assessment Platform</p>
+              <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '700', color: '#111827' }}>
+                Compliance Manager
+              </h1>
+              <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#6b7280' }}>
+                Federal Grants Assessment
+              </p>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main style={{ maxWidth: '80rem', margin: '0 auto', padding: '3rem 1.5rem' }}>
-        {/* Hero Section */}
-        <div style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.5rem 0' }}>Compliance Projects</h2>
-          <p style={{ fontSize: '1.125rem', color: '#4b5563', margin: '0 0 2rem 0' }}>Track and manage federal compliance across all projects. Risk-based assessment system.</p>
+      <main style={{ maxWidth: '1280px', margin: '0 auto', padding: '48px 24px' }}>
+        {/* Title Section */}
+        <div style={{ marginBottom: '48px' }}>
+          <h2 style={{ fontSize: '36px', fontWeight: '700', margin: '0 0 8px 0', color: '#111827' }}>
+            Compliance Projects
+          </h2>
+          <p style={{ fontSize: '16px', color: '#4b5563', margin: '0 0 24px 0' }}>
+            Track and manage federal compliance across all projects
+          </p>
 
           {/* Search */}
-          <div style={{ position: 'relative', maxWidth: '28rem', marginBottom: '3rem' }}>
-            <svg style={{ position: 'absolute', left: '0.75rem', top: '0.875rem', width: '20px', height: '20px', color: '#9ca3af' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+          <div style={{ position: 'relative', maxWidth: '320px' }}>
+            <Search
+              style={{
+                position: 'absolute',
+                left: '12px',
+                top: '12px',
+                width: '20px',
+                height: '20px',
+                color: '#9ca3af',
+              }}
+            />
             <input
               type="text"
               placeholder="Search projects..."
-              style={{ width: '100%', paddingLeft: '2.5rem', paddingRight: '1rem', paddingTop: '0.625rem', paddingBottom: '0.625rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', color: '#111827', fontSize: '1rem', boxSizing: 'border-box' }}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '10px 10px 10px 40px',
+                border: '1px solid #d1d5db',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontFamily: 'inherit',
+              }}
             />
           </div>
         </div>
 
         {/* Projects Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-          {/* Project 1 */}
-          <div style={{ padding: '1.5rem', borderRadius: '1rem', border: '1px solid #bbf7d0', backgroundColor: '#f0fdf4', cursor: 'pointer' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-              <div style={{ flex: 1 }}>
-                <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Northern Network Broadband</h3>
-                <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>Northern Tribes</p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gap: '24px',
+          }}
+        >
+          {filtered.map((project) => (
+            <div
+              key={project.id}
+              style={{
+                backgroundColor: getStatusBg(project.status),
+                border: `1px solid ${getStatusBorder(project.status)}`,
+                borderRadius: '12px',
+                padding: '24px',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+                e.currentTarget.style.borderColor = '#bfdbfe'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'none'
+                e.currentTarget.style.borderColor = getStatusBorder(project.status)
+              }}
+            >
+              {/* Project Header */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  marginBottom: '16px',
+                }}
+              >
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '18px',
+                      fontWeight: '700',
+                      margin: '0 0 4px 0',
+                      color: '#111827',
+                    }}
+                  >
+                    {project.name}
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
+                    {project.client}
+                  </p>
+                </div>
+                {project.status === 'great' && (
+                  <CheckCircle2 style={{ width: '24px', height: '24px', color: '#16a34a', marginLeft: '8px' }} />
+                )}
               </div>
-              <svg style={{ width: '24px', height: '24px', color: '#16a34a', marginLeft: '0.5rem', flexShrink: 0 }} fill="currentColor" viewBox="0 0 24 24">
-                <path d="M10 15.172l9.192-9.193a1 1 0 111.415 1.415l-10.6 10.6a1 1 0 01-1.415 0l-4.242-4.243a1 1 0 111.415-1.415l3.03 3.03z" />
-              </svg>
-            </div>
-            <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'rgba(255,255,255,0.6)', borderRadius: '0.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Overall Score</span>
-                <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>82%</span>
-              </div>
-              <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px', overflow: 'hidden' }}>
-                <div style={{ height: '8px', borderRadius: '9999px', backgroundColor: '#22c55e', width: '82%' }} />
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1.25rem', textAlign: 'center' }}>
-              <div style={{ padding: '0.5rem', backgroundColor: '#f0fdf4', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '600', margin: 0 }}>82%</p>
-                <p style={{ fontSize: '0.75rem', color: '#16a34a', margin: '0.25rem 0 0 0' }}>Compliant</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fef3c7', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#92400e', fontWeight: '600', margin: 0 }}>12%</p>
-                <p style={{ fontSize: '0.75rem', color: '#ca8a04', margin: '0.25rem 0 0 0' }}>Evidence</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fee2e2', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#991b1b', fontWeight: '600', margin: 0 }}>6%</p>
-                <p style={{ fontSize: '0.75rem', color: '#dc2626', margin: '0.25rem 0 0 0' }}>Non-Compliant</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid #bbf7d0' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#4b5563', backgroundColor: '#e5e7eb', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>2 CFR 200</span>
-              <svg style={{ width: '16px', height: '16px', color: '#2563eb' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </div>
 
-          {/* Project 2 */}
-          <div style={{ padding: '1.5rem', borderRadius: '1rem', border: '1px solid #bfdbfe', backgroundColor: '#f0f9ff', cursor: 'pointer' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-              <div style={{ flex: 1 }}>
-                <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Digital Equity Initiative</h3>
-                <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>Mountain County</p>
+              {/* Score Section */}
+              <div
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                  borderRadius: '8px',
+                  padding: '16px',
+                  marginBottom: '16px',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '12px',
+                  }}
+                >
+                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#374151' }}>
+                    Overall Score
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '32px',
+                      fontWeight: '700',
+                      color: '#111827',
+                    }}
+                  >
+                    {project.score}%
+                  </span>
+                </div>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '8px',
+                    backgroundColor: '#e5e7eb',
+                    borderRadius: '9999px',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <div
+                    style={{
+                      height: '100%',
+                      backgroundColor: getScoreColor(project.status),
+                      width: `${project.score}%`,
+                      borderRadius: '9999px',
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-            <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'rgba(255,255,255,0.6)', borderRadius: '0.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Overall Score</span>
-                <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>65%</span>
-              </div>
-              <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px', overflow: 'hidden' }}>
-                <div style={{ height: '8px', borderRadius: '9999px', backgroundColor: '#3b82f6', width: '65%' }} />
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1.25rem', textAlign: 'center' }}>
-              <div style={{ padding: '0.5rem', backgroundColor: '#f0fdf4', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '600', margin: 0 }}>65%</p>
-                <p style={{ fontSize: '0.75rem', color: '#16a34a', margin: '0.25rem 0 0 0' }}>Compliant</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fef3c7', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#92400e', fontWeight: '600', margin: 0 }}>20%</p>
-                <p style={{ fontSize: '0.75rem', color: '#ca8a04', margin: '0.25rem 0 0 0' }}>Evidence</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fee2e2', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#991b1b', fontWeight: '600', margin: 0 }}>15%</p>
-                <p style={{ fontSize: '0.75rem', color: '#dc2626', margin: '0.25rem 0 0 0' }}>Non-Compliant</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid #bfdbfe' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#4b5563', backgroundColor: '#e5e7eb', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Title VI</span>
-              <svg style={{ width: '16px', height: '16px', color: '#2563eb' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </div>
 
-          {/* Project 3 */}
-          <div style={{ padding: '1.5rem', borderRadius: '1rem', border: '1px solid #fcd34d', backgroundColor: '#fffbeb', cursor: 'pointer' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-              <div style={{ flex: 1 }}>
-                <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Rural Connectivity</h3>
-                <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>Eastern Region</p>
+              {/* Status Breakdown */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '12px',
+                  marginBottom: '16px',
+                  textAlign: 'center',
+                  fontSize: '12px',
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: '#f0fdf4',
+                    borderRadius: '6px',
+                    padding: '8px',
+                  }}
+                >
+                  <p style={{ fontWeight: '600', color: '#166534', margin: 0 }}>
+                    {project.compliant}%
+                  </p>
+                  <p style={{ fontSize: '11px', color: '#16a34a', margin: '4px 0 0 0' }}>
+                    Compliant
+                  </p>
+                </div>
+                <div
+                  style={{
+                    backgroundColor: '#fef3c7',
+                    borderRadius: '6px',
+                    padding: '8px',
+                  }}
+                >
+                  <p style={{ fontWeight: '600', color: '#92400e', margin: 0 }}>
+                    {project.pending}%
+                  </p>
+                  <p style={{ fontSize: '11px', color: '#ca8a04', margin: '4px 0 0 0' }}>
+                    Evidence
+                  </p>
+                </div>
+                <div
+                  style={{
+                    backgroundColor: '#fee2e2',
+                    borderRadius: '6px',
+                    padding: '8px',
+                  }}
+                >
+                  <p style={{ fontWeight: '600', color: '#991b1b', margin: 0 }}>
+                    {project.non}%
+                  </p>
+                  <p style={{ fontSize: '11px', color: '#dc2626', margin: '4px 0 0 0' }}>
+                    Non-Compliant
+                  </p>
+                </div>
               </div>
-            </div>
-            <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'rgba(255,255,255,0.6)', borderRadius: '0.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Overall Score</span>
-                <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>45%</span>
-              </div>
-              <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px', overflow: 'hidden' }}>
-                <div style={{ height: '8px', borderRadius: '9999px', backgroundColor: '#f59e0b', width: '45%' }} />
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1.25rem', textAlign: 'center' }}>
-              <div style={{ padding: '0.5rem', backgroundColor: '#f0fdf4', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '600', margin: 0 }}>45%</p>
-                <p style={{ fontSize: '0.75rem', color: '#16a34a', margin: '0.25rem 0 0 0' }}>Compliant</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fef3c7', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#92400e', fontWeight: '600', margin: 0 }}>35%</p>
-                <p style={{ fontSize: '0.75rem', color: '#ca8a04', margin: '0.25rem 0 0 0' }}>Evidence</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fee2e2', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#991b1b', fontWeight: '600', margin: 0 }}>20%</p>
-                <p style={{ fontSize: '0.75rem', color: '#dc2626', margin: '0.25rem 0 0 0' }}>Non-Compliant</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid #fcd34d' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#4b5563', backgroundColor: '#e5e7eb', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>2 CFR 200</span>
-              <svg style={{ width: '16px', height: '16px', color: '#2563eb' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </div>
 
-          {/* Project 4 */}
-          <div style={{ padding: '1.5rem', borderRadius: '1rem', border: '1px solid #e5e7eb', backgroundColor: '#f3f4f6', cursor: 'pointer' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-              <div style={{ flex: 1 }}>
-                <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Coastal Broadband</h3>
-                <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>Pacific Nations</p>
+              {/* Footer */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingTop: '16px',
+                  borderTop: `1px solid ${getStatusBorder(project.status)}`,
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    color: '#4b5563',
+                    backgroundColor: '#e5e7eb',
+                    padding: '4px 12px',
+                    borderRadius: '9999px',
+                  }}
+                >
+                  {project.regulation}
+                </span>
+                <ChevronRight style={{ width: '16px', height: '16px', color: '#2563eb' }} />
               </div>
             </div>
-            <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'rgba(255,255,255,0.6)', borderRadius: '0.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Overall Score</span>
-                <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>55%</span>
-              </div>
-              <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px', overflow: 'hidden' }}>
-                <div style={{ height: '8px', borderRadius: '9999px', backgroundColor: '#9ca3af', width: '55%' }} />
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1.25rem', textAlign: 'center' }}>
-              <div style={{ padding: '0.5rem', backgroundColor: '#f0fdf4', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '600', margin: 0 }}>55%</p>
-                <p style={{ fontSize: '0.75rem', color: '#16a34a', margin: '0.25rem 0 0 0' }}>Compliant</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fef3c7', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#92400e', fontWeight: '600', margin: 0 }}>30%</p>
-                <p style={{ fontSize: '0.75rem', color: '#ca8a04', margin: '0.25rem 0 0 0' }}>Evidence</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fee2e2', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#991b1b', fontWeight: '600', margin: 0 }}>15%</p>
-                <p style={{ fontSize: '0.75rem', color: '#dc2626', margin: '0.25rem 0 0 0' }}>Non-Compliant</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#4b5563', backgroundColor: '#e5e7eb', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>NEPA</span>
-              <svg style={{ width: '16px', height: '16px', color: '#2563eb' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-
-          {/* Project 5 */}
-          <div style={{ padding: '1.5rem', borderRadius: '1rem', border: '1px solid #e5e7eb', backgroundColor: '#f3f4f6', cursor: 'pointer' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-              <div style={{ flex: 1 }}>
-                <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Tech Support Center</h3>
-                <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>Central Services</p>
-              </div>
-            </div>
-            <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'rgba(255,255,255,0.6)', borderRadius: '0.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Overall Score</span>
-                <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>28%</span>
-              </div>
-              <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px', overflow: 'hidden' }}>
-                <div style={{ height: '8px', borderRadius: '9999px', backgroundColor: '#9ca3af', width: '28%' }} />
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1.25rem', textAlign: 'center' }}>
-              <div style={{ padding: '0.5rem', backgroundColor: '#f0fdf4', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '600', margin: 0 }}>28%</p>
-                <p style={{ fontSize: '0.75rem', color: '#16a34a', margin: '0.25rem 0 0 0' }}>Compliant</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fef3c7', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#92400e', fontWeight: '600', margin: 0 }}>40%</p>
-                <p style={{ fontSize: '0.75rem', color: '#ca8a04', margin: '0.25rem 0 0 0' }}>Evidence</p>
-              </div>
-              <div style={{ padding: '0.5rem', backgroundColor: '#fee2e2', borderRadius: '0.375rem' }}>
-                <p style={{ fontSize: '0.75rem', color: '#991b1b', fontWeight: '600', margin: 0 }}>32%</p>
-                <p style={{ fontSize: '0.75rem', color: '#dc2626', margin: '0.25rem 0 0 0' }}>Non-Compliant</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#4b5563', backgroundColor: '#e5e7eb', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>ADA</span>
-              <svg style={{ width: '16px', height: '16px', color: '#2563eb' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </div>
+          ))}
         </div>
+
+        {filtered.length === 0 && (
+          <div
+            style={{
+              textAlign: 'center',
+              paddingTop: '48px',
+              color: '#9ca3af',
+            }}
+          >
+            <p style={{ fontSize: '16px' }}>No projects found</p>
+          </div>
+        )}
       </main>
 
       {/* Footer */}
-      <footer style={{ backgroundColor: '#ffffff', borderTop: '1px solid #e5e7eb', marginTop: '4rem' }}>
-        <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '3rem 1.5rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '2rem' }}>
+      <footer
+        style={{
+          borderTop: '1px solid #e5e7eb',
+          backgroundColor: '#ffffff',
+          marginTop: '64px',
+        }}
+      >
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '48px 24px' }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '32px',
+              marginBottom: '32px',
+            }}
+          >
             <div>
-              <h3 style={{ fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Support</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>compliance@support.gov</p>
+              <h3 style={{ fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
+                Support
+              </h3>
+              <p style={{ fontSize: '14px', color: '#4b5563', margin: 0 }}>
+                compliance@support.gov
+              </p>
             </div>
             <div>
-              <h3 style={{ fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Frameworks</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>10 CFR codes with 25+ obligations</p>
+              <h3 style={{ fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
+                Frameworks
+              </h3>
+              <p style={{ fontSize: '14px', color: '#4b5563', margin: 0 }}>
+                10 CFR codes with 25+ obligations
+              </p>
             </div>
             <div>
-              <h3 style={{ fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Version</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>Compliance Manager v3.0</p>
+              <h3 style={{ fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
+                Version
+              </h3>
+              <p style={{ fontSize: '14px', color: '#4b5563', margin: 0 }}>
+                Compliance Manager v3.0
+              </p>
             </div>
           </div>
-          <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '2rem' }}>
-            <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>© 2026 Compliance Manager. All rights reserved.</p>
+          <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '32px' }}>
+            <p style={{ fontSize: '14px', color: '#4b5563', margin: 0 }}>
+              © 2026 Compliance Manager. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
     </div>
   )
+}
 }
