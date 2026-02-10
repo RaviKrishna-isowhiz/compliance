@@ -8,9 +8,14 @@ const geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' })
 
 export const metadata: Metadata = {
-  title: 'TBCP Compliance Assessment System',
-  description: 'Tribal Broadband Connectivity Program - Federal Compliance Review & Assessment',
+  title: 'Compliance Manager - Federal Compliance Assessment',
+  description: 'Risk-based federal compliance assessment platform. Manage 2 CFR 200, Title VI, NEPA, and ADA compliance with AI-validated evidence verification.',
   generator: 'v0.app',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
 }
 
 export default function RootLayout({
