@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Shield, Search, TrendingUp, AlertCircle, CheckCircle2, ArrowRight, BarChart3, Zap } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Shield, Search, CheckCircle2, ArrowRight, AlertCircle } from 'lucide-react'
 import { FunnelQuestionnaire } from '@/components/compliance/funnel-questionnaire'
 
 interface Project {
@@ -24,28 +23,6 @@ const PROJECTS: Project[] = [
   { id: 'p4', name: 'Coastal Broadband', clientName: 'Pacific Nations', score: 55, status: 'in-progress', regulation: 'NEPA', compliant: 55, needsEvidence: 30, nonCompliant: 15 },
   { id: 'p5', name: 'Tech Support Center', clientName: 'Central Services', score: 28, status: 'not-started', regulation: 'ADA', compliant: 28, needsEvidence: 40, nonCompliant: 32 },
 ]
-
-const getStatusColor = (status: string) => {
-  const colors: Record<string, string> = {
-    great: 'bg-green-50 border-green-200',
-    good: 'bg-blue-50 border-blue-200',
-    partial: 'bg-amber-50 border-amber-200',
-    'in-progress': 'bg-purple-50 border-purple-200',
-    'not-started': 'bg-gray-50 border-gray-200',
-  }
-  return colors[status] || colors['not-started']
-}
-
-const getStatusLabel = (status: string) => {
-  const labels: Record<string, string> = {
-    great: 'Great',
-    good: 'Good',
-    partial: 'Partial',
-    'in-progress': 'In Progress',
-    'not-started': 'Not Started',
-  }
-  return labels[status] || status
-}
 
 export default function Page() {
   const [view, setView] = useState<'dashboard' | 'questionnaire'>('dashboard')
@@ -69,141 +46,147 @@ export default function Page() {
 
   const selectedProject = PROJECTS.find(p => p.id === selectedProjectId)
 
+  if (view === 'questionnaire' && selectedProject) {
+    return (
+      <FunnelQuestionnaire
+        regulationCode={selectedProject.regulation}
+        onComplete={() => {
+          handleBack()
+        }}
+        onBack={handleBack}
+      />
+    )
+  }
+
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
       {/* Header */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 40, backgroundColor: '#ffffff', borderBottom: '1px solid #e2e8f0' }}>
-        <div style={{ maxWidth: '80rem', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '0.5rem', backgroundColor: '#2563eb' }}>
-                <Shield style={{ width: '24px', height: '24px', color: '#ffffff' }} />
-              </div>
-              <div>
-                <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', margin: 0 }}>Compliance Manager</h1>
-                <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: '0.25rem 0 0 0' }}>Federal Grants Assessment Platform</p>
-              </div>
+      <header style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e2e8f0', position: 'sticky', top: 0, zIndex: 40 }}>
+        <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '0 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '0.5rem', backgroundColor: '#2563eb' }}>
+              <Shield style={{ width: '24px', height: '24px', color: '#ffffff' }} />
+            </div>
+            <div>
+              <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Compliance Manager</h1>
+              <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: 0 }}>Federal Grants Assessment Platform</p>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-        {view === 'dashboard' && (
-          <div style={{ maxWidth: '80rem', margin: '0 auto', width: '100%', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '3rem', paddingBottom: '3rem' }}>
-            {/* Hero Section */}
-            <div style={{ marginBottom: '3rem' }}>
-              <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Compliance Projects</h2>
-              <p style={{ fontSize: '1.125rem', color: '#4b5563', marginBottom: '2rem' }}>Track and manage federal compliance across all projects. Risk-based assessment system.</p>
+      <main style={{ maxWidth: '80rem', margin: '0 auto', padding: '3rem 1.5rem' }}>
+        {/* Hero Section */}
+        <div style={{ marginBottom: '3rem' }}>
+          <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.5rem 0' }}>Compliance Projects</h2>
+          <p style={{ fontSize: '1.125rem', color: '#4b5563', margin: '0 0 2rem 0' }}>Track and manage federal compliance across all projects. Risk-based assessment system.</p>
 
-              {/* Search */}
-              <div style={{ position: 'relative', maxWidth: '28rem' }}>
-                <Search style={{ position: 'absolute', left: '0.75rem', top: '0.875rem', width: '20px', height: '20px', color: '#9ca3af' }} />
-                <input
-                  type="text"
-                  placeholder="Search projects..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ width: '100%', paddingLeft: '2.5rem', paddingRight: '1rem', paddingTop: '0.625rem', paddingBottom: '0.625rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', color: '#111827', fontSize: '1rem' }}
-                />
-              </div>
-            </div>
-
-            {/* Projects Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-              {filteredProjects.map(project => {
-                const bgColor = project.status === 'great' ? '#f0fdf4' : project.status === 'good' ? '#f0f9ff' : project.status === 'partial' ? '#fffbeb' : '#f3f4f6'
-                const borderColor = project.status === 'great' ? '#bbf7d0' : project.status === 'good' ? '#bfdbfe' : project.status === 'partial' ? '#fcd34d' : '#e5e7eb'
-                const scoreColor = project.status === 'great' ? '#22c55e' : project.status === 'good' ? '#3b82f6' : project.status === 'partial' ? '#f59e0b' : '#9ca3af'
-
-                return (
-                  <div
-                    key={project.id}
-                    style={{ display: 'block', padding: '1.5rem', borderRadius: '1rem', border: `1px solid ${borderColor}`, backgroundColor: bgColor, cursor: 'pointer' }}
-                    onClick={() => handleSelectProject(project.id)}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-                      <div style={{ flex: 1 }}>
-                        <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.25rem' }}>{project.name}</h3>
-                        <p style={{ fontSize: '0.875rem', color: '#4b5563' }}>{project.clientName}</p>
-                      </div>
-                      {project.status === 'great' && <CheckCircle2 style={{ width: '24px', height: '24px', color: '#16a34a', marginLeft: '0.5rem', flexShrink: 0 }} />}
-                    </div>
-
-                    {/* Compliance Metrics */}
-                    <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'rgba(255,255,255,0.6)', borderRadius: '0.5rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                        <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Overall Score</span>
-                        <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>{project.score}%</span>
-                      </div>
-                      <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px', overflow: 'hidden' }}>
-                        <div style={{ height: '8px', borderRadius: '9999px', backgroundColor: scoreColor, width: `${project.score}%` }} />
-                      </div>
-                    </div>
-
-                    {/* Status Breakdown */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1.25rem', textAlign: 'center' }}>
-                      <div style={{ padding: '0.5rem', backgroundColor: '#f0fdf4', borderRadius: '0.375rem' }}>
-                        <p style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '600', margin: 0 }}>{project.compliant}%</p>
-                        <p style={{ fontSize: '0.75rem', color: '#16a34a', margin: '0.25rem 0 0 0' }}>Compliant</p>
-                      </div>
-                      <div style={{ padding: '0.5rem', backgroundColor: '#fef3c7', borderRadius: '0.375rem' }}>
-                        <p style={{ fontSize: '0.75rem', color: '#92400e', fontWeight: '600', margin: 0 }}>{project.needsEvidence}%</p>
-                        <p style={{ fontSize: '0.75rem', color: '#ca8a04', margin: '0.25rem 0 0 0' }}>Evidence</p>
-                      </div>
-                      <div style={{ padding: '0.5rem', backgroundColor: '#fee2e2', borderRadius: '0.375rem' }}>
-                        <p style={{ fontSize: '0.75rem', color: '#991b1b', fontWeight: '600', margin: 0 }}>{project.nonCompliant}%</p>
-                        <p style={{ fontSize: '0.75rem', color: '#dc2626', margin: '0.25rem 0 0 0' }}>Non-Compliant</p>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: `1px solid ${borderColor}` }}>
-                      <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#4b5563', backgroundColor: '#e5e7eb', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
-                        {project.regulation}
-                      </span>
-                      <ArrowRight style={{ width: '16px', height: '16px', color: '#2563eb' }} />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-
-            {filteredProjects.length === 0 && (
-              <div className="text-center py-12">
-                <AlertCircle className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                <p className="text-slate-600">No projects found</p>
-              </div>
-            )}
+          {/* Search */}
+          <div style={{ position: 'relative', maxWidth: '28rem' }}>
+            <Search style={{ position: 'absolute', left: '0.75rem', top: '0.875rem', width: '20px', height: '20px', color: '#9ca3af' }} />
+            <input
+              type="text"
+              placeholder="Search projects..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ width: '100%', paddingLeft: '2.5rem', paddingRight: '1rem', paddingTop: '0.625rem', paddingBottom: '0.625rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', color: '#111827', fontSize: '1rem', boxSizing: 'border-box' }}
+            />
           </div>
-        )}
+        </div>
 
-        {view === 'questionnaire' && selectedProject && (
-          <FunnelQuestionnaire
-            regulationCode={selectedProject.regulation}
-            onComplete={() => {
-              handleBack()
-            }}
-            onBack={handleBack}
-          />
+        {/* Projects Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+          {filteredProjects.map(project => {
+            const bgColor = project.status === 'great' ? '#f0fdf4' : project.status === 'good' ? '#f0f9ff' : project.status === 'partial' ? '#fffbeb' : '#f3f4f6'
+            const borderColor = project.status === 'great' ? '#bbf7d0' : project.status === 'good' ? '#bfdbfe' : project.status === 'partial' ? '#fcd34d' : '#e5e7eb'
+            const scoreColor = project.status === 'great' ? '#22c55e' : project.status === 'good' ? '#3b82f6' : project.status === 'partial' ? '#f59e0b' : '#9ca3af'
+
+            return (
+              <div
+                key={project.id}
+                style={{ padding: '1.5rem', borderRadius: '1rem', border: `1px solid ${borderColor}`, backgroundColor: bgColor, cursor: 'pointer', transition: 'all 0.2s' }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLDivElement
+                  el.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+                  el.style.borderColor = '#3b82f6'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLDivElement
+                  el.style.boxShadow = 'none'
+                  el.style.borderColor = borderColor
+                }}
+                onClick={() => handleSelectProject(project.id)}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>{project.name}</h3>
+                    <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>{project.clientName}</p>
+                  </div>
+                  {project.status === 'great' && <CheckCircle2 style={{ width: '24px', height: '24px', color: '#16a34a', marginLeft: '0.5rem', flexShrink: 0 }} />}
+                </div>
+
+                {/* Compliance Metrics */}
+                <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'rgba(255,255,255,0.6)', borderRadius: '0.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Overall Score</span>
+                    <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>{project.score}%</span>
+                  </div>
+                  <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px', overflow: 'hidden' }}>
+                    <div style={{ height: '8px', borderRadius: '9999px', backgroundColor: scoreColor, width: `${project.score}%`, transition: 'width 0.3s' }} />
+                  </div>
+                </div>
+
+                {/* Status Breakdown */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1.25rem', textAlign: 'center' }}>
+                  <div style={{ padding: '0.5rem', backgroundColor: '#f0fdf4', borderRadius: '0.375rem' }}>
+                    <p style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '600', margin: 0 }}>{project.compliant}%</p>
+                    <p style={{ fontSize: '0.75rem', color: '#16a34a', margin: '0.25rem 0 0 0' }}>Compliant</p>
+                  </div>
+                  <div style={{ padding: '0.5rem', backgroundColor: '#fef3c7', borderRadius: '0.375rem' }}>
+                    <p style={{ fontSize: '0.75rem', color: '#92400e', fontWeight: '600', margin: 0 }}>{project.needsEvidence}%</p>
+                    <p style={{ fontSize: '0.75rem', color: '#ca8a04', margin: '0.25rem 0 0 0' }}>Evidence</p>
+                  </div>
+                  <div style={{ padding: '0.5rem', backgroundColor: '#fee2e2', borderRadius: '0.375rem' }}>
+                    <p style={{ fontSize: '0.75rem', color: '#991b1b', fontWeight: '600', margin: 0 }}>{project.nonCompliant}%</p>
+                    <p style={{ fontSize: '0.75rem', color: '#dc2626', margin: '0.25rem 0 0 0' }}>Non-Compliant</p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: `1px solid ${borderColor}` }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#4b5563', backgroundColor: '#e5e7eb', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
+                    {project.regulation}
+                  </span>
+                  <ArrowRight style={{ width: '16px', height: '16px', color: '#2563eb' }} />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {filteredProjects.length === 0 && (
+          <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
+            <AlertCircle style={{ width: '48px', height: '48px', color: '#d1d5db', margin: '0 auto 1rem' }} />
+            <p style={{ color: '#4b5563' }}>No projects found</p>
+          </div>
         )}
       </main>
 
       {/* Footer */}
       <footer style={{ backgroundColor: '#ffffff', borderTop: '1px solid #e5e7eb', marginTop: '4rem' }}>
-        <div style={{ maxWidth: '80rem', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '3rem', paddingBottom: '3rem' }}>
+        <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '3rem 1.5rem' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '2rem' }}>
             <div>
               <h3 style={{ fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Support</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4b5563' }}>compliance@support.gov</p>
+              <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>compliance@support.gov</p>
             </div>
             <div>
               <h3 style={{ fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Frameworks</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4b5563' }}>10 CFR codes with 25+ obligations</p>
+              <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>10 CFR codes with 25+ obligations</p>
             </div>
             <div>
               <h3 style={{ fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Version</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4b5563' }}>Compliance Manager v3.0</p>
+              <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>Compliance Manager v3.0</p>
             </div>
           </div>
           <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '2rem' }}>

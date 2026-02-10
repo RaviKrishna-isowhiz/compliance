@@ -24,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased bg-background text-foreground" style={{ margin: 0, padding: 0, backgroundColor: '#ffffff', color: '#111827' }}>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`} style={{ margin: 0, padding: 0 }}>
+      <body style={{ margin: 0, padding: 0, backgroundColor: '#ffffff', color: '#111827', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', lineHeight: '1.6' }}>
         {children}
       </body>
     </html>
