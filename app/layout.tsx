@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased bg-background text-foreground">
+      <body className="font-sans antialiased bg-background text-foreground" style={{ margin: 0, padding: 0, backgroundColor: '#ffffff', color: '#111827' }}>
         {children}
       </body>
     </html>

@@ -70,18 +70,18 @@ export default function Page() {
   const selectedProject = PROJECTS.find(p => p.id === selectedProjectId)
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600">
-                <Shield className="w-6 h-6 text-white" />
+      <header style={{ position: 'sticky', top: 0, zIndex: 40, backgroundColor: '#ffffff', borderBottom: '1px solid #e2e8f0' }}>
+        <div style={{ maxWidth: '80rem', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '0.5rem', backgroundColor: '#2563eb' }}>
+                <Shield style={{ width: '24px', height: '24px', color: '#ffffff' }} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-slate-900">Compliance Manager</h1>
-                <p className="text-xs text-slate-500">Federal Grants Assessment Platform</p>
+                <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', margin: 0 }}>Compliance Manager</h1>
+                <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: '0.25rem 0 0 0' }}>Federal Grants Assessment Platform</p>
               </div>
             </div>
           </div>
@@ -89,89 +89,84 @@ export default function Page() {
       </header>
 
       {/* Main Content */}
-      <main>
+      <main style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
         {view === 'dashboard' && (
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12">
+          <div style={{ maxWidth: '80rem', margin: '0 auto', width: '100%', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '3rem', paddingBottom: '3rem' }}>
             {/* Hero Section */}
-            <div className="mb-12">
-              <h2 className="text-4xl font-bold text-slate-900 mb-2">Compliance Projects</h2>
-              <p className="text-lg text-slate-600 mb-8">Track and manage federal compliance across all projects. Risk-based assessment system.</p>
+            <div style={{ marginBottom: '3rem' }}>
+              <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Compliance Projects</h2>
+              <p style={{ fontSize: '1.125rem', color: '#4b5563', marginBottom: '2rem' }}>Track and manage federal compliance across all projects. Risk-based assessment system.</p>
 
               {/* Search */}
-              <div className="relative max-w-md">
-                <Search className="absolute left-3 top-3.5 w-5 h-5 text-slate-400" />
+              <div style={{ position: 'relative', maxWidth: '28rem' }}>
+                <Search style={{ position: 'absolute', left: '0.75rem', top: '0.875rem', width: '20px', height: '20px', color: '#9ca3af' }} />
                 <input
                   type="text"
                   placeholder="Search projects..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{ width: '100%', paddingLeft: '2.5rem', paddingRight: '1rem', paddingTop: '0.625rem', paddingBottom: '0.625rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', color: '#111827', fontSize: '1rem' }}
                 />
               </div>
             </div>
 
             {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map(project => (
-                <div
-                  key={project.id}
-                  className={`rounded-2xl border p-6 cursor-pointer transition-all hover:shadow-xl hover:border-blue-300 ${getStatusColor(project.status)}`}
-                  onClick={() => handleSelectProject(project.id)}
-                >
-                  <div className="flex items-start justify-between mb-5">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-slate-900 mb-1">{project.name}</h3>
-                      <p className="text-sm text-slate-600">{project.clientName}</p>
-                    </div>
-                    {project.status === 'great' && <CheckCircle2 className="w-6 h-6 text-green-600 flex-shrink-0 ml-2" />}
-                  </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+              {filteredProjects.map(project => {
+                const bgColor = project.status === 'great' ? '#f0fdf4' : project.status === 'good' ? '#f0f9ff' : project.status === 'partial' ? '#fffbeb' : '#f3f4f6'
+                const borderColor = project.status === 'great' ? '#bbf7d0' : project.status === 'good' ? '#bfdbfe' : project.status === 'partial' ? '#fcd34d' : '#e5e7eb'
+                const scoreColor = project.status === 'great' ? '#22c55e' : project.status === 'good' ? '#3b82f6' : project.status === 'partial' ? '#f59e0b' : '#9ca3af'
 
-                  {/* Compliance Metrics */}
-                  <div className="mb-6 p-4 bg-white/60 rounded-lg">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-semibold text-slate-700">Overall Score</span>
-                      <span className="text-3xl font-bold text-slate-900">{project.score}%</span>
+                return (
+                  <div
+                    key={project.id}
+                    style={{ display: 'block', padding: '1.5rem', borderRadius: '1rem', border: `1px solid ${borderColor}`, backgroundColor: bgColor, cursor: 'pointer' }}
+                    onClick={() => handleSelectProject(project.id)}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+                      <div style={{ flex: 1 }}>
+                        <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.25rem' }}>{project.name}</h3>
+                        <p style={{ fontSize: '0.875rem', color: '#4b5563' }}>{project.clientName}</p>
+                      </div>
+                      {project.status === 'great' && <CheckCircle2 style={{ width: '24px', height: '24px', color: '#16a34a', marginLeft: '0.5rem', flexShrink: 0 }} />}
                     </div>
-                    <div className="w-full bg-slate-200 rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full transition-all ${
-                          project.status === 'great'
-                            ? 'bg-green-500'
-                            : project.status === 'good'
-                            ? 'bg-blue-500'
-                            : project.status === 'partial'
-                            ? 'bg-amber-500'
-                            : 'bg-slate-400'
-                        }`}
-                        style={{ width: `${project.score}%` }}
-                      />
-                    </div>
-                  </div>
 
-                  {/* Status Breakdown */}
-                  <div className="grid grid-cols-3 gap-3 mb-5 text-center">
-                    <div className="p-2 bg-green-50 rounded">
-                      <p className="text-xs text-green-700 font-semibold">{project.compliant}%</p>
-                      <p className="text-xs text-green-600">Compliant</p>
+                    {/* Compliance Metrics */}
+                    <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'rgba(255,255,255,0.6)', borderRadius: '0.5rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Overall Score</span>
+                        <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827' }}>{project.score}%</span>
+                      </div>
+                      <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px', overflow: 'hidden' }}>
+                        <div style={{ height: '8px', borderRadius: '9999px', backgroundColor: scoreColor, width: `${project.score}%` }} />
+                      </div>
                     </div>
-                    <div className="p-2 bg-yellow-50 rounded">
-                      <p className="text-xs text-yellow-700 font-semibold">{project.needsEvidence}%</p>
-                      <p className="text-xs text-yellow-600">Needs Evidence</p>
-                    </div>
-                    <div className="p-2 bg-red-50 rounded">
-                      <p className="text-xs text-red-700 font-semibold">{project.nonCompliant}%</p>
-                      <p className="text-xs text-red-600">Non-Compliant</p>
-                    </div>
-                  </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-                    <span className="text-xs font-semibold text-slate-600 bg-slate-200/60 px-3 py-1 rounded-full">
-                      {project.regulation}
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-blue-600" />
+                    {/* Status Breakdown */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '1.25rem', textAlign: 'center' }}>
+                      <div style={{ padding: '0.5rem', backgroundColor: '#f0fdf4', borderRadius: '0.375rem' }}>
+                        <p style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '600', margin: 0 }}>{project.compliant}%</p>
+                        <p style={{ fontSize: '0.75rem', color: '#16a34a', margin: '0.25rem 0 0 0' }}>Compliant</p>
+                      </div>
+                      <div style={{ padding: '0.5rem', backgroundColor: '#fef3c7', borderRadius: '0.375rem' }}>
+                        <p style={{ fontSize: '0.75rem', color: '#92400e', fontWeight: '600', margin: 0 }}>{project.needsEvidence}%</p>
+                        <p style={{ fontSize: '0.75rem', color: '#ca8a04', margin: '0.25rem 0 0 0' }}>Evidence</p>
+                      </div>
+                      <div style={{ padding: '0.5rem', backgroundColor: '#fee2e2', borderRadius: '0.375rem' }}>
+                        <p style={{ fontSize: '0.75rem', color: '#991b1b', fontWeight: '600', margin: 0 }}>{project.nonCompliant}%</p>
+                        <p style={{ fontSize: '0.75rem', color: '#dc2626', margin: '0.25rem 0 0 0' }}>Non-Compliant</p>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: `1px solid ${borderColor}` }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#4b5563', backgroundColor: '#e5e7eb', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
+                        {project.regulation}
+                      </span>
+                      <ArrowRight style={{ width: '16px', height: '16px', color: '#2563eb' }} />
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             {filteredProjects.length === 0 && (
@@ -195,24 +190,24 @@ export default function Page() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 mt-16">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <footer style={{ backgroundColor: '#ffffff', borderTop: '1px solid #e5e7eb', marginTop: '4rem' }}>
+        <div style={{ maxWidth: '80rem', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '3rem', paddingBottom: '3rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '2rem' }}>
             <div>
-              <h3 className="font-bold text-slate-900 mb-2">Support</h3>
-              <p className="text-sm text-slate-600">compliance@support.gov</p>
+              <h3 style={{ fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Support</h3>
+              <p style={{ fontSize: '0.875rem', color: '#4b5563' }}>compliance@support.gov</p>
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 mb-2">Frameworks</h3>
-              <p className="text-sm text-slate-600">10 CFR codes with 25+ obligations</p>
+              <h3 style={{ fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Frameworks</h3>
+              <p style={{ fontSize: '0.875rem', color: '#4b5563' }}>10 CFR codes with 25+ obligations</p>
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 mb-2">Version</h3>
-              <p className="text-sm text-slate-600">Compliance Manager v3.0</p>
+              <h3 style={{ fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Version</h3>
+              <p style={{ fontSize: '0.875rem', color: '#4b5563' }}>Compliance Manager v3.0</p>
             </div>
           </div>
-          <div className="border-t border-slate-200 pt-8">
-            <p className="text-sm text-slate-600">© 2026 Compliance Manager. All rights reserved.</p>
+          <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '2rem' }}>
+            <p style={{ fontSize: '0.875rem', color: '#4b5563', margin: 0 }}>© 2026 Compliance Manager. All rights reserved.</p>
           </div>
         </div>
       </footer>
